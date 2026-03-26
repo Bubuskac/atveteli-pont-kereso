@@ -34,6 +34,19 @@ export const GET_PICKUP_POINTS = gql`
   }
 `;
 
+export const I =gql`
+{
+    __type(name: "Address") {
+      fields {
+        name
+        type {
+          name
+          kind
+        }
+      }
+    }
+}`
+
 /*{
     "data": {
         "__type": {

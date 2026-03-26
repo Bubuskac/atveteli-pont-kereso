@@ -1,31 +1,17 @@
 import React, { useMemo, useState } from "react";
 import { useQuery } from "@apollo/client";
-import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, useMap, Popup } from "react-leaflet";
+import MarkerClusterGroup from "react-leaflet-cluster";
 import "leaflet/dist/leaflet.css";
-import { GET_PICKUP_POINTS } from "./queries";
+import { GET_PICKUP_POINTS, I } from "./queries";
 import { SearchBar } from "./SearchBar";
 import { InfoPanel } from "./InfoPanel";
-
-type PickupPoint = {
-  id: string;
-  name: string;
-  type: string;
-  address: {
-    city: string;
-    street: string;
-    zip: string;
-    country: string;
-  };
-  location: {
-    lat: number;
-    lng: number;
-  };
-  openingHours?: string;
-};
+import type { PickupPoint } from "./PickupPoint";
 
 const DEFAULT_CENTER: [number, number] = [47.4979, 19.0402]; // Budapest
 
 export const PickupPointMap: React.FC = () => {
+  //useQuery(I)
   const { data, loading, error } = useQuery<{ pickupPoints: PickupPoint[] }, { sessionId: string}>(
     GET_PICKUP_POINTS,
     {
@@ -72,11 +58,24 @@ export const PickupPointMap: React.FC = () => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           <Recenter center={mapCenter} zoom={mapZoom} />
-          {/* Itt lehetne clusteringet használni */}
+          <MarkerClusterGroup chunkedLoading>
+            {points.map((p) => (
+              <Marker
+                key={p.id}
+                position={[p.location.latitude, p.location.longitude]}
+              >
+                <Popup>
+                  <strong>{p.label}</strong><br />
+                  {p.address.addressLine1}<br />
+                  {p.address.postalCode} {p.address.city}
+                </Popup>
+              </Marker>
+            ))}
+          </MarkerClusterGroup>
           {points.map((p) => (
             <Marker
               key={p.id}
-              position={[p.location.lat, p.location.lng]}
+              position={[p.location.latitude, p.location.longitude]}
               eventHandlers={{
                 click: () => setSelectedId(p.id),
               }}
