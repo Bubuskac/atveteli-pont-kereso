@@ -1,8 +1,10 @@
 import React, { useMemo, useState } from "react";
 import { useQuery } from "@apollo/client";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { GET_PICKUP_POINTS } from "./queries";
+import { SearchBar } from "./SearchBar";
+import { InfoPanel } from "./InfoPanel";
 
 type PickupPoint = {
   id: string;
@@ -24,8 +26,13 @@ type PickupPoint = {
 const DEFAULT_CENTER: [number, number] = [47.4979, 19.0402]; // Budapest
 
 export const PickupPointMap: React.FC = () => {
-  const { data, loading, error } = useQuery<{ pickupPoints: PickupPoint[] }>(
-    GET_PICKUP_POINTS
+  const { data, loading, error } = useQuery<{ pickupPoints: PickupPoint[] }, { sessionId: string}>(
+    GET_PICKUP_POINTS,
+    {
+      variables: {
+        sessionId: "9f2bb9e8-6653-482d-a953-3932f68dd07a"
+      }
+    }
   );
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
