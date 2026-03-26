@@ -40,7 +40,7 @@ export const SearchBar: React.FC<Props> = ({ value, onChange, onLocationFound })
   return (
     <form
       onSubmit={handleSearch}
-      style={{ position: "absolute", top: 10, left: 10, zIndex: 1000, background: "white", padding: 8, borderRadius: 4 }}
+      style={{ position: "absolute", top: 10, left: 50, zIndex: 1000, background: "white", padding: 8, borderRadius: 4 }}
     >
       <input
         type="text"
