@@ -22,11 +22,14 @@ type session = {
 
 export const PickupPointMap: React.FC = () => {
   //useQuery(I)
-  const { data, loading, error } = useQuery<{ session: session }, { sessionId: string}>(
+  const { data, loading, error } = useQuery<{ session: session }, { sessionId: string, filters: any}>(
     GET_PICKUP_POINTS,
     {
       variables: {
-        sessionId: "9f2bb9e8-6653-482d-a953-3932f68dd07a"
+        sessionId: "9f2bb9e8-6653-482d-a953-3932f68dd07a",
+        filters: {
+          country: "HU"
+        }
       }
     }
   );

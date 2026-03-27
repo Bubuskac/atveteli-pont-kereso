@@ -1,10 +1,10 @@
 import { gql } from "@apollo/client";
 
 export const GET_PICKUP_POINTS = gql`
-  query ($sessionId: ID!) {
+  query ($sessionId: ID!, $filters: PickupPointFilterInput) {
     session(id: $sessionId) {
       pickupPoint {
-        pickupPoints {
+        pickupPoints(filters: $filters) {
           map {
             custom {
               pid
@@ -15,7 +15,7 @@ export const GET_PICKUP_POINTS = gql`
             common
             disallowed
           }
-          points(first: 5, page: 1) {
+          points(first: 500, page: 1) {
             paginatorInfo {
               count
               hasMorePages
@@ -60,25 +60,14 @@ export const GET_PICKUP_POINTS = gql`
     }
   }
 `;
-
+//PickupPointSortInput
 export const I =gql`
 query {
-  __type(name: "PaginatorInfo") {
+  __type(name: "PickupPointFilterInput") {
     name
     kind
-    fields {
+    inputFields {
       name
-      args {
-        name
-        type {
-          kind
-          name
-          ofType {
-            kind
-            name
-          }
-        }
-      }
       type {
         kind
         name
@@ -89,7 +78,8 @@ query {
       }
     }
   }
-}`;
+}
+`;
 
 /*{
     "data": {
