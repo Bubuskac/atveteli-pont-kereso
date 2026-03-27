@@ -2,50 +2,94 @@ import { gql } from "@apollo/client";
 
 export const GET_PICKUP_POINTS = gql`
   query ($sessionId: ID!) {
-    addresses(sessionId: $sessionId) {
-      id
-      referenceId
-      label
-
-      recipient {
-        firstName
-        lastName
-        name
-        language
-        email
-        phone
-      }
-
-      address {
-        country
-        state
-        city
-        postalCode
-        addressLine1
-        addressLine2
-        note
-      }
-
-      location {
-        latitude
-        longitude
+    session(id: $sessionId) {
+      pickupPoint {
+        pickupPoints {
+          map {
+            custom {
+              pid
+              lat
+              lng
+              icn
+            }
+            common
+            disallowed
+          }
+          points(first: 5, page: 1) {
+            paginatorInfo {
+              count
+              hasMorePages
+              total
+            }
+            data {
+              icon
+              type
+              id
+              pid
+              name
+              address {
+                country
+                state
+                city
+                postalCode
+                addressLine1
+                addressLine2
+                note
+              }
+              location {
+                latitude
+                longitude
+              }
+              phone
+              openingHours {
+                day
+                start {
+                  hour
+                  minute
+                }
+                end {
+                  hour
+                  minute
+                }
+              }
+              isOpen
+            }
+          }
+        }
       }
     }
   }
 `;
 
 export const I =gql`
-{
-    __type(name: "Address") {
-      fields {
+query {
+  __type(name: "PaginatorInfo") {
+    name
+    kind
+    fields {
+      name
+      args {
         name
         type {
-          name
           kind
+          name
+          ofType {
+            kind
+            name
+          }
+        }
+      }
+      type {
+        kind
+        name
+        ofType {
+          kind
+          name
         }
       }
     }
-}`
+  }
+}`;
 
 /*{
     "data": {

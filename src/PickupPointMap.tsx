@@ -10,9 +10,19 @@ import type { PickupPoint } from "./PickupPoint";
 
 const DEFAULT_CENTER: [number, number] = [47.4979, 19.0402]; // Budapest
 
+type session = {
+  pickupPoint: {
+    pickupPoints: {
+      points: {
+        data: PickupPoint[]
+      }
+    }
+  }
+}
+
 export const PickupPointMap: React.FC = () => {
   //useQuery(I)
-  const { data, loading, error } = useQuery<{ pickupPoints: PickupPoint[] }, { sessionId: string}>(
+  const { data, loading, error } = useQuery<{ session: session }, { sessionId: string}>(
     GET_PICKUP_POINTS,
     {
       variables: {
@@ -26,7 +36,7 @@ export const PickupPointMap: React.FC = () => {
   const [mapCenter, setMapCenter] = useState<[number, number]>(DEFAULT_CENTER);
   const [mapZoom, setMapZoom] = useState(12);
 
-  const points = useMemo(() => data?.pickupPoints ?? [], [data]);
+  const points = useMemo(() => data?.session.pickupPoint.pickupPoints.points.data ?? [], [data]);
 
   return (
     <div style={{ display: "flex", height: "100vh" }}>
