@@ -15,8 +15,15 @@ export type PickupPoint = {
     latitude: number;
     longitude: number;
   };
-  openingHours: {
-    hour: number;
-    minute: number;
-  };
+  openingHours: [{
+    day: string;
+    start: {
+      hour: number;
+      minute: number;
+    };
+    end: {
+      hour: number;
+      minute: number;
+    };
+  }];
 };

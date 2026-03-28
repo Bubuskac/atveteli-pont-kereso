@@ -35,6 +35,8 @@ export const PickupPointMap: React.FC = () => {
   );
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [panelId, setPanelId] = useState<string | null>(null);
+  const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [mapCenter, setMapCenter] = useState<[number, number]>(DEFAULT_CENTER);
   const [mapZoom, setMapZoom] = useState(12);
@@ -76,6 +78,9 @@ export const PickupPointMap: React.FC = () => {
               <Marker
                 key={p.id}
                 position={[p.location.latitude, p.location.longitude]}
+                eventHandlers={{
+                  click: () => setPanelId(p.id),
+                }}
               >
                 <Popup>
                   <strong>{p.label}</strong><br />
@@ -90,18 +95,25 @@ export const PickupPointMap: React.FC = () => {
               key={p.id}
               position={[p.location.latitude, p.location.longitude]}
               eventHandlers={{
-                click: () => setSelectedId(p.id),
+                click: () => setPanelId(p.id),
               }}
-            />
+            >
+              <Popup>
+                <strong>{p.label}</strong><br />
+                {p.address.addressLine1}<br />
+                {p.address.postalCode} {p.address.city}
+              </Popup>
+            </Marker>
           ))}
         </MapContainer>
       </div>
 
       <div style={{ width: "30%", borderLeft: "1px solid #ddd", padding: "1rem" }}>
         <InfoPanel
-          point={points.find((p) => p.id === selectedId) ?? null}
+          point={points.find((p) => p.id === panelId) ?? null}
           selectedId={selectedId}
-          onSelect={(id) => setSelectedId(id)}
+          selectedAddress={selectedAddress}
+          onSelect={(id, address) => {setSelectedId(id); setSelectedAddress(address)}}
         />
       </div>
     </div>

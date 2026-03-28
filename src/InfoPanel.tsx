@@ -4,10 +4,11 @@ import type { PickupPoint } from "./PickupPoint";
 type Props = {
   point: PickupPoint | null;
   selectedId: string | null;
-  onSelect: (id: string | null) => void;
+  selectedAddress: string | null;
+  onSelect: (id: string | null, address: string | null) => void;
 };
 
-export const InfoPanel: React.FC<Props> = ({ point, selectedId, onSelect }) => {
+export const InfoPanel: React.FC<Props> = ({ point, selectedId, selectedAddress, onSelect }) => {
   if (!point) {
     return <div>Nincs kiválasztott csomagpont.</div>;
   }
@@ -21,9 +22,12 @@ export const InfoPanel: React.FC<Props> = ({ point, selectedId, onSelect }) => {
       {point.address.note && (
         <p><strong>Megjegyzés:</strong> {point.address.note}</p>
       )}
+      {point.openingHours.map((oh) => (
+        <p>{oh.day}: {oh.start.hour}:{oh.start.minute} - {oh.end.hour}:{oh.end.minute}</p>
+      ))}
 
       <button
-        onClick={() => onSelect(point.id)}
+        onClick={() => onSelect(point.id, fullAddress)}
         style={{
           marginTop: "1rem",
           backgroundColor: selectedId === point.id ? "green" : "#007bff",
@@ -38,7 +42,7 @@ export const InfoPanel: React.FC<Props> = ({ point, selectedId, onSelect }) => {
 
       {selectedId && (
         <p style={{ marginTop: "0.5rem", fontSize: 12 }}>
-          Kiválasztott csomagpont ID: {selectedId}
+          Kiválasztott csomagpont címe: {selectedAddress}
         </p>
       )}
     </div>
