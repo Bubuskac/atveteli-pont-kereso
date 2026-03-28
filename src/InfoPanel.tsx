@@ -17,7 +17,7 @@ export const InfoPanel: React.FC<Props> = ({ point, selectedId, selectedAddress,
 
   return (
     <div>
-      <h2>{point.label}</h2>
+      <h3>{point.type}</h3>
       <p><strong>Cím:</strong> {fullAddress}</p>
       {point.address.note && (
         <p><strong>Megjegyzés:</strong> {point.address.note}</p>

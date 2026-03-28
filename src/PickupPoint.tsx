@@ -2,6 +2,7 @@ export type PickupPoint = {
   id: string;
   referenceId: string;
   label: string;
+  type: string;
   address: {
     city: string;
     addressLine1: string;
